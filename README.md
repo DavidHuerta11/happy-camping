@@ -21,9 +21,15 @@ It provides weather data as well as campground locations for the user.
 
 PERN stack: PostgreSQL, Express, React, Node.js
 
-## APIs
+## External APIs Used
 
-Problems you faced, unique elements of your project
+[Open Weather API](https://openweathermap.org/api)
+
+[Campgrounds Search API](https://developer.active.com/docs/read/Campground_Search_API)
+
+## Problems faced
+ 
+The main problem faced was with the JSON data provided by the Open Weather API. Some of the JSON data was not valid which caused errors within the database. The file was also too large which caused PostgreSQL out of memory errors.
 
 
 
