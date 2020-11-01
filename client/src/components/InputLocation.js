@@ -82,7 +82,6 @@ function InputLocation() {
                             <li>France</li>
                             <li>Italy</li>
                             <li>Spain</li>
-                            <li>Canada</li>
                         </ul>
                     </ReactTooltip>
                     {userInput.country === "United States" || userInput.country === "US" ? (
