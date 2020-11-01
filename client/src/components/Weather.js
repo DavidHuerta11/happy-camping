@@ -22,7 +22,7 @@ function Weather({country, locationId}) {
         try {
             setIsLoading(true);
             const API_KEY = "d401eff9123652a10b7094845d6a9117"
-            const endpoint = `http://api.openweathermap.org/data/2.5/weather?id=${locationId}&units=metric&appid=${API_KEY}`;
+            const endpoint = `https://api.openweathermap.org/data/2.5/weather?id=${locationId}&units=metric&appid=${API_KEY}`;
         
             const weatherResponse = await fetch(endpoint);
             const jsonWeather = await weatherResponse.json();

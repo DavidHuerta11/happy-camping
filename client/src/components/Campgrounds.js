@@ -12,7 +12,7 @@ function Campgrounds({coord}) {
         try {
             const API_KEY='h8uygc2a9nd83ef29ycx85uh'
             const corsAPIHost = "https://cors-anywhere.herokuapp.com/";
-            const endpoint = `${corsAPIHost}http://api.amp.active.com/camping/campgrounds/?landmarkLat=${coord.lat}&landmarkLong=${coord.long}&landmarkName=true&api_key=${API_KEY}`;
+            const endpoint = `${corsAPIHost}https://api.amp.active.com/camping/campgrounds/?landmarkLat=${coord.lat}&landmarkLong=${coord.long}&landmarkName=true&api_key=${API_KEY}`;
             
             const response = 
                 await fetch(endpoint, { signal: abortController.signal })
