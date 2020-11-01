@@ -12,6 +12,20 @@ It provides weather data as well as campground locations for the user.
 
 <img width="500" height="500" src="client/src/img/Happy_Camping_Gif.gif">
 
+## Instructions
+
+1. Enter the desired country (abbreviation or fullname)
+2. If US enter the desired city
+3. Enter the desired city
+
+***Note: Currently the countries which have the most available cities for display are the following:***
+- United States
+- Mexico
+- Canada
+- Germany
+- France
+- Italy
+- Spain
 
 ## Demo
 
