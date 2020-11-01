@@ -15,8 +15,10 @@ It provides weather data as well as campground locations for the user.
 ## Instructions
 
 1. Enter the desired country (abbreviation or fullname)
-2. If US enter the desired city
+2. If the United States is selected then enter the desired city
 3. Enter the desired city
+4. If the United States or Canada are selected the campgrounds section will appear; enter number of campgrounds you wish to view
+5. Select campground link and view the campground
 
 ***Note: Currently the countries which have the most available cities for display are the following:***
 - United States
