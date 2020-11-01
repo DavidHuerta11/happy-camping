@@ -10,7 +10,9 @@
 A React application which helps outdoor enthusiasts go camping. 
 It provides weather data as well as campground locations for the user.
 
-<img width="500" height="500" src="client/src/img/Happy_Camping_Gif.gif">
+<p align="center">
+ <img width="500" height="500" src="client/src/img/Happy_Camping_Gif.gif">
+</p>
 
 ## Instructions
 
