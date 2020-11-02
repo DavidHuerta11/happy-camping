@@ -44,8 +44,12 @@ PERN stack: PostgreSQL, Express, React, Node.js
 [Campgrounds Search API](https://developer.active.com/docs/read/Campground_Search_API)
 
 ## Problems faced
- 
-The main problem faced was with the JSON data provided by the Open Weather API. Some of the JSON data was not valid which caused errors within the database. The file was also too large which caused PostgreSQL out of memory errors.
 
+### 11-01-20
+The main problem faced was with the JSON data available for download by the Open Weather API. Some of the JSON data was not valid which caused errors within the database. The file was also too large which caused PostgreSQL out of memory errors, so the number of locations had to be reduced.
 
+### 11-02-20
+The heroku Hobby-dev plan limit only offers up to 10k rows in the database and the current amount I have imported in is 70k+ even after reducing the number of locations. 
+
+Instead of another reduction of cities I will change the method of fetching the data. Currently I'm following the recommended method by the API documentation *We recommend to call API by city ID to get unambiguous result for your city.* Instead I will fetch the data using *cityname, countryname, statecode* 
 
