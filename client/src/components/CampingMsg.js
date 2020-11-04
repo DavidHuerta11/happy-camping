@@ -12,9 +12,11 @@ const tempTypes  = {
 }
 
 function CampingMsg({feelsLike, weatherIcon}) {
+    const [isLoading, setIsLoading] = useState(false);
     const [campingMsg, setCampingMsg] = useState("");
 
     useEffect(() => {
+        setIsLoading(true);
         // MSg for the user to see if it's good to camp or not
         if (feelsLike < -15) {
             setCampingMsg(tempTypes.SEVERE_COLD);
@@ -29,13 +31,19 @@ function CampingMsg({feelsLike, weatherIcon}) {
         }else {
             setCampingMsg(tempTypes.OTHER);
         }
+        setIsLoading(false);
     }, []);
 
     return (
         <>
             <h2>
-                {campingMsg}
-                <img src={weatherIcon} alt="props icon" />
+                {isLoading ? 
+                    <p style={{color: "white"}}>Loading...</p> :
+                    <>
+                        {campingMsg}
+                        <img src={weatherIcon} alt="props icon" />
+                    </>
+                }
             </h2>
         </>
     )
