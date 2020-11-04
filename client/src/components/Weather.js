@@ -11,40 +11,52 @@ const formatTemp = (num) => {
     return (Math.round(num * 100) / 100).toFixed(2);
   }
 
-function Weather({country, locationId}) {
+function Weather({city, stateCode, countryCode}) {
     const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
     const [weather, setWeather] = useState({forecast: "", description: "", icon: ""})
     const [tempData, setTempData] = useState({temperature: "", humidity: null, clouds: null, feelsLike: null});
     const [coord, setCoord] = useState({long: null, lat: null});
-    
+  
     // Get weather data and store it
     const getWeather = async () => {
         try {
             setIsLoading(true);
-            const API_KEY = "d401eff9123652a10b7094845d6a9117"
-            const endpoint = `https://api.openweathermap.org/data/2.5/weather?id=${locationId}&units=metric&appid=${API_KEY}`;
-        
-            const weatherResponse = await fetch(endpoint);
-            const jsonWeather = await weatherResponse.json();
-            
-            // store weather data
-            setWeather({
-                forecast: jsonWeather.weather[0].main, 
-                description: jsonWeather.weather[0].description, 
-                icon: jsonWeather.weather[0].icon + '.png' 
-            });
-            setTempData({
-                ...tempData, 
-                temperature: jsonWeather.main.temp + '°C', 
-                humidity: jsonWeather.main.humidity, 
-                clouds: jsonWeather.clouds.all, 
-                feelsLike: jsonWeather.main.feels_like
-            });
-            setCoord({
-                long: jsonWeather.coord.lon, 
-                lat: jsonWeather.coord.lat
-            });
 
+            let endpoint;
+            if (countryCode === 'US') {
+                endpoint = `https://api.openweathermap.org/data/2.5/weather?q=${city},${stateCode},${countryCode}&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_KEY}`;
+            } else {
+                endpoint = `https://api.openweathermap.org/data/2.5/weather?q=${city},${countryCode}&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_KEY}`;
+            } //Houston,MO,US
+            
+            const weatherResponse = await fetch(endpoint);
+            
+            // if fetch was succesful
+            if (weatherResponse.ok) {
+                const jsonWeather = await weatherResponse.json();
+                
+                // store weather data
+                setWeather({
+                    forecast: jsonWeather.weather[0].main, 
+                    description: jsonWeather.weather[0].description, 
+                    icon: jsonWeather.weather[0].icon + '.png' 
+                });
+                setTempData({
+                    ...tempData, 
+                    temperature: jsonWeather.main.temp + '°C', 
+                    humidity: jsonWeather.main.humidity, 
+                    clouds: jsonWeather.clouds.all, 
+                    feelsLike: jsonWeather.main.feels_like
+                });
+                setCoord({
+                    long: jsonWeather.coord.lon, 
+                    lat: jsonWeather.coord.lat
+                });
+            } else {
+                setIsError(true);
+                console.log(`There was an issue with the input city: ${city}`);
+            }
             setIsLoading(false);
         } catch (err) {
             console.error(err.message);
@@ -70,12 +82,15 @@ function Weather({country, locationId}) {
         getWeather();
     }, []);
 
-    return (
-        <>
-            {isLoading ? 
-                <p style={{color: "white"}}>Loading...</p> : (
+    if (isLoading) {
+        return <p style={{color: "white"}}>Loading...</p>
+    } else {
+        if (isError) {
+            return <p style={{color: "red"}}>That city is not available. Try again.</p>
+        } else {
+            return (
                 <>
-                    <WeatherWrapper  >
+                    <WeatherWrapper>
                         <CampingMsg feelsLike={tempData.feelsLike} weatherIcon={weather.icon} />
                         
                         {/* Cloud image with weather data */}
@@ -99,14 +114,14 @@ function Weather({country, locationId}) {
                             <label className="fahrenheit"><input type="radio" value="imperial" name="toggle" onChange={e => tempConverter(e)} /><span>Fahrenheit</span></label>
                         </TempToggle>
                     </WeatherWrapper>
-                    {country === "United States" || country === "US" || country === "Canada" ||country === "CA" ? 
+                    {countryCode === "US" || countryCode === "CA" ? 
                         <Campgrounds coord={coord}/> :
                         null}
                 </>
-                )
-            }
-        </>
-    )
+            )
+        }
+    }
+    
 }
 
 export default Weather
