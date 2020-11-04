@@ -12,7 +12,8 @@ function InputLocation() {
     const [isLoading, setIsLoading] = useState(false);
     const [userInput, setUserInput] = useState({country: "", state: "", city: "", isSubmitted: false});
     const [responseMsg, setResponseMsg] = useState("");
-    const [locationId, setLocationId] = useState(null);
+    const [stateCode, setStateCode] = useState("");
+    const [countryCode, setCountryCode] = useState("");
     const inputRef = useRef(null);
 
     // When form is submitted start to load weather and campground data
@@ -37,12 +38,13 @@ function InputLocation() {
             } else{
                 tempState = userInput.state;
             }
-            const response = await fetch(`/location/${userInput.country}/${tempState}/${userInput.city}`);
+            const response = await fetch(`/location/${userInput.country}/${tempState}`);
             const jsonData = await response.json();
             
             // Check to see if request value was valid in database
             if (typeof(jsonData) === "object") {
-                setLocationId(jsonData.location_id);
+                setCountryCode(jsonData.country_code);
+                setStateCode(jsonData.state_code);
             } else {
                 setResponseMsg(jsonData);
             }
@@ -75,25 +77,34 @@ function InputLocation() {
                     <ReactTooltip id='global'  place="bottom" type="light" >
                         <p><u>Available Countries</u></p>
                         <ul style={{listStyle: "none"}}>
-                            <li>United States</li>
-                            <li>Mexico</li>
-                            <li>Canada</li>
-                            <li>Germany</li>
-                            <li>France</li>
-                            <li>Italy</li>
-                            <li>Spain</li>
-                            <li>Canada</li>
+                            <li>North American Countries</li>
+                            <li>European Countries</li>
+                            <li>Russia</li>
+                            <li>China</li>
+                            <li>Argentina</li>
+                            <li>Australia</li>
+                            <li>New Zealand</li>
                         </ul>
                     </ReactTooltip>
                     {userInput.country === "United States" || userInput.country === "US" ? (
-                        <input
-                        type="text"
-                        value={userInput.state}
-                        onChange={e => setUserInput({...userInput, state: e.target.value, isSubmitted: false})}
-                        placeholder="Search for a state..."
-                        />
+                        <Fragment>
+                            <input
+                            type="text"
+                            value={userInput.state}
+                            onChange={e => setUserInput({...userInput, state: e.target.value, isSubmitted: false})}
+                            placeholder="Search for a state..."
+                            />
+                            {userInput.country !== "" && userInput.state !== "" ? (
+                                <input
+                                    type="text"
+                                    value={userInput.city}
+                                    onChange={e => setUserInput({...userInput, city: e.target.value, isSubmitted: false})}
+                                    placeholder="Search for a city..."
+                                />
+                            ) : null}
+                        </Fragment>
                     ) : null}
-                    {userInput.country !== "" ? (
+                    {userInput.country !== "" && (userInput.country !== "US" && userInput.country !== "United States") ? (
                         <input
                             type="text"
                             value={userInput.city}
@@ -113,11 +124,10 @@ function InputLocation() {
                     <p style={{color: "white"}}>Loading...</p> : (
                         responseMsg === "" ?
                             <Fragment>
-                                {userInput.country !== "United States" && userInput.country !== "US" && 
-                                    userInput.country !== "Canada" && userInput.country !== "CA" ? 
+                                {countryCode !== "US" && countryCode !== "CA" ? 
                                     <p style={{color: "yellow"}}>Campground locations are available for the United States and Canada.</p> : 
                                     null}
-                                <Weather country={userInput.country} locationId={locationId}/>
+                                <Weather city={userInput.city} stateCode={stateCode} countryCode={countryCode} />
                             </Fragment> :
                             <p style={{color: "red"}}>{responseMsg}</p>
                     )
