@@ -21,13 +21,13 @@ It provides weather data as well as campground locations for the user.
 5. Select campground link and view the campground
 
 ***Note: Currently the countries which have the most available cities for display are the following:***
-- United States
-- Mexico
-- Canada
-- Germany
-- France
-- Italy
-- Spain
+- North American Countries
+- European Countries
+- Russia
+- China
+- Argentina
+- Australia
+- New Zealand
 
 ## Demo
 
@@ -48,8 +48,8 @@ PERN stack: PostgreSQL, Express, React, Node.js
 ### 11-01-20
 The main problem faced was with the JSON data available for download by the Open Weather API. Some of the JSON data was not valid which caused errors within the database. The file was also too large which caused PostgreSQL out of memory errors, so the number of locations had to be reduced.
 
-### 11-02-20
+### 11-04-20
 The heroku Hobby-dev plan limit only offers up to 10k rows in the database and the current amount I have imported in is 70k+ even after reducing the number of locations. 
 
-Instead of another reduction of cities I will change the method of fetching the data. Currently I'm following the recommended method by the API documentation *We recommend to call API by city ID to get unambiguous result for your city.* Instead I will fetch the data using *cityname, countryname, statecode* 
+Instead of another reduction of cities I changed the method of fetching the data. I was following the recommended method by the API documentation *We recommend to call API by city ID to get unambiguous result for your city.* Instead I fetched the data using *cityname, countryname, statecode* and in turn changed the tables and inputs to the database to account for these changes.
 
