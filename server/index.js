@@ -16,33 +16,43 @@ if (process.env.NODE_ENV === "production") {
 }
 
 //ROUTES// (post, get, put , delete)
-app.get("/location/:country/:state/:city", async(req,res) => {
+app.get("/location/:country/:state", async(req,res) => {
     try {
         // get data from client side
-        let { country, state, city } = req.params;
+        let { country, state } = req.params;
         country = country.toUpperCase();
         state = state.toUpperCase();
-        city = city.toUpperCase();
 
         // no state selected
         if (state === "NONE") {
             state = "";
         }
         
-        const location = await pool.query(
-            `SELECT location_id 
-             FROM locations 
-             WHERE (country_abbreviation = $1 OR country_name = $1) 
-                    AND (state_abbreviation = $2 OR state_name = $2) 
-                    AND city = $3`, 
-            [country, state, city]
+        const state_code = await pool.query(
+            `SELECT state_code
+             FROM states 
+             WHERE state_code = $1 OR state_name = $1`, 
+            [state]
+        );
+
+        const country_code = await pool.query(
+            `SELECT country_code
+             FROM countries 
+             WHERE country_code = $1 OR country_name = $1`, 
+            [country]
         );
         
-        if (location.rows === undefined || location.rows.length === 0) {
-            res.json("Location not found. Try again.");
+        // handle sql response
+        if (country_code.rows.length === 0) {
+            res.json("That country is not available. Try again.");
+        } else if (country_code.rows[0].country_code === 'US' &&  state_code.rows.length === 0) {
+            res.json("That state is not available. Try again.");
         } else {
-            res.json(location.rows[0]);
+            // combine objects
+            const result = {...country_code.rows[0], ...state_code.rows[0]};
+            res.json(result);
         }
+        
     } catch (err) {
         console.error(err.message);
     }
